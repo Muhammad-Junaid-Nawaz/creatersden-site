@@ -88,13 +88,12 @@ Preview artifacts are retained in [`docs/design-previews`](docs/design-previews/
 
 ## Immediate next work
 
-1. Get this commit merged into `main` and pushed (client's local git, same workflow as before).
-2. Enable GitHub Pages (Settings → Pages → Source: GitHub Actions) and confirm the Actions run succeeds.
-3. Verify the live `.github.io` URL in a real browser (desktop + mobile widths) — first trustworthy visual QA pass of this project.
-4. As client-supplied assets arrive in `public/media/`, replace placeholder routes with real content one at a time.
-5. Build the estimator's actual logic once scope/turnaround rules are supplied.
-6. Full `web-qa-audit` pass before calling any route launch-ready.
-7. Connect a purchased custom domain later (client's stated plan: maintain on GitHub short-term, possible move to WordPress once a domain is bought — noted in `PROJECT.md`, not yet decided).
+1. **Add the missing metrics strip to the home page hero** — the approved mockup (`docs/design-previews/palette-comparison.html`) has a three-column band below the hero actions ("One brief / a coherent edit system", "Every ratio / 9:16 · 1:1 · 16:9", "One handoff / organized final masters"). This was not carried into the actual built home page — a real omission, flagged by the client 2026-09-22. Build it next session.
+2. **Timeline dot centering — checked, not reproduced.** Client flagged the process-timeline dots as visually off-center from the vertical line, comparing against the mockup. Measured precisely on the live site (`getBoundingClientRect` on the timeline border vs. computed dot position): dot center is within 1px of the border's true center — effectively centered. Likely a stale cache or screenshot artifact on the client's end. Re-check with a hard refresh next session before assuming it's fixed; don't re-litigate the math, just get a fresh screenshot of the live site specifically.
+3. Real content for all six placeholder routes, and the estimator's actual logic, as client assets arrive in `public/media/`.
+4. Sitemap, structured data, and full Open Graph image handling.
+5. Full `web-qa-audit` pass before calling any route launch-ready.
+6. Connect a purchased custom domain later (client's stated plan: maintain on GitHub short-term, possible move to WordPress once a domain is bought).
 
 ## Repository publication completed
 
