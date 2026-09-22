@@ -1,0 +1,49 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<title>{title} — CreatersDen</title>
+		<meta name="description" content={description} />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={`${title} — CreatersDen`} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		<!-- og:image intentionally omitted until a real social share frame exists;
+		     see PROJECT.md > Content inventory. Do not point this at a placeholder. -->
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={`${title} — CreatersDen`} />
+		<meta name="twitter:description" content={description} />
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<SiteHeader />
+		<main id="main">
+			<slot />
+		</main>
+		<SiteFooter />
+	</body>
+</html>

@@ -1,7 +1,7 @@
 # CreatersDen Progress Report
 
 **Status date:** 2026-09-22  
-**Project phase:** Design approved; GitHub repository established; implementation setup is next
+**Project phase:** Astro scaffold, design tokens, structural shell, and home page built; six routes + estimator + QA + deploy remain
 
 ## What has been completed
 
@@ -56,25 +56,37 @@ Preview artifacts are retained in [`docs/design-previews`](docs/design-previews/
 - No CreatersDen repository existed.
 - The supplied `alshedivat/al-folio` commit is owned by a third party and must not be altered or treated as the client's repository.
 
+### 7. Astro scaffold, tokens, and home page (this session)
+
+- Scaffolded Astro 7.3 (minimal template, TypeScript strict), merged around the existing `AGENTS.md`/`README.md` rather than overwriting them.
+- Configured `astro.config.mjs` (`site`/`base`) and added `public/.nojekyll`, both verified against Astro's current GitHub Pages docs before writing.
+- Selected and installed four self-hosted, SIL-OFL-licensed font families for the four approved typography roles (Archivo, Fraunces, IBM Plex Sans, IBM Plex Mono), deliberately distinct from each reference site's own fonts. Latin-only subset (cut 80+ font files to 20).
+- Built design tokens (`src/styles/tokens.css`) from the approved Cinder & Ember palette, with two derived tokens (surface, line/divider) flagged rather than invented silently.
+- Built the structural shell: `BaseLayout.astro` (skip link, landmarks, per-page meta), `SiteHeader.astro`, `SiteFooter.astro` — all internal links base-aware for the `/creatersden-site/` GitHub Pages path.
+- Built the home page as the representative route: draft hero copy (carried over from `docs/design-previews/palette-comparison.html`, marked draft on-page), the timeline signature element, an honestly-labeled work-preview section, and an estimator CTA.
+- Production build succeeds with no errors or warnings.
+- Visually rendered the home page and **caught two real bugs**: a missing-slash favicon href, and a mispositioned timeline marker (fixed by simplifying a calc() to a literal value).
+- **Verification gap, flagged rather than hidden:** the only rendering tool available in this environment is an old bundled-Qt build of `wkhtmltoimage` (no real Chromium/Firefox/Safari could be installed — apt only has snap-wrapped transitional packages that don't run headless here). It doesn't support flexbox `gap` and cannot honor a strict mobile viewport (`--disable-smart-width` unsupported). Desktop-width rendering is reasonably trustworthy; mobile/responsive behavior is implemented per standard CSS but not yet confirmed in a real browser.
+
 ## What has not been completed
 
-- No Astro project or production page templates have been scaffolded yet.
+- Six of eight routes (`/work/`, two case-study templates, `/services/`, `/process/`, `/estimate/`, `/about/`, `/contact/`) and the custom 404 page.
+- The four-step estimator's actual logic (only a CTA linking to `/estimate/` exists so far).
+- Sitemap, structured data, and full Open Graph image handling.
 - No production images, reels, preview proxies, project metrics, testimonials, client logos, or team assets have been supplied.
 - No final email address, form endpoint, scheduling URL, privacy copy, or legal copy has been supplied.
-- No production website code has been pushed yet; the repository currently contains the approved design and continuity package.
-- No GitHub Pages deployment has been run.
-- No custom domain has been purchased or configured.
+- Nothing has been pushed to GitHub yet this session — Claude cannot push (no repository credentials, and per its own operating rules wouldn't handle them if offered); the working tree is committed locally only, pending your push.
+- No GitHub Pages deployment has been run; no custom domain purchased or configured.
+- Mobile/responsive behavior is implemented but not yet confirmed in a real browser (see verification gap above) — worth a quick manual check before this milestone is considered fully done.
 
 ## Immediate next work
 
-1. Create the Astro static project in this folder.
-2. Build the shared layout, navigation, footer, type tokens, palette tokens, and reduced-motion behavior.
-3. Implement Home, Work, Services, Process, Estimate, About, Contact, and case-study routes.
-4. Use clearly labeled editorial placeholders until real portfolio assets arrive.
-5. Implement the client-side estimator without inventing prices.
-6. Run responsive, keyboard, contrast, link, metadata, and build QA.
-7. Add the GitHub Pages Actions workflow when the Astro scaffold exists, then enable Pages.
-8. Connect a purchased custom domain later.
+1. Build the remaining six routes and the two case-study templates.
+2. Implement the client-side estimator without inventing prices.
+3. Run responsive, keyboard, contrast, link, metadata, and build QA (`web-qa-audit`) — including a real-browser mobile check to close the gap noted above.
+4. Add sitemap, structured data, and full per-page OG metadata.
+5. Add the GitHub Pages Actions workflow, then enable Pages.
+6. Connect a purchased custom domain later.
 
 ## Repository publication completed
 

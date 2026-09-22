@@ -1,0 +1,24 @@
+/*
+  Typography roles per HANDOFF.md / PROJECT.md:
+  - Display grotesk  -> Archivo (900, 700)      — campaign statements, hero copy, CTAs
+  - Editorial serif  -> Fraunces (500, 400 ital) — story intros, case-study moments, pull quotes
+  - Readable sans     -> IBM Plex Sans (400/500/600) — nav, body, forms, labels
+  - Monospace         -> IBM Plex Mono (400/500) — timecodes, metadata, estimator output
+
+  All four are SIL Open Font License 1.1, self-hosted via @fontsource (no external
+  font request, no render-blocking third-party origin). Only the weights actually
+  used in the design system are imported to keep the subset small.
+*/
+@import '@fontsource/archivo/latin-700.css';
+@import '@fontsource/archivo/latin-900.css';
+
+@import '@fontsource/fraunces/latin-400-italic.css';
+@import '@fontsource/fraunces/latin-500.css';
+@import '@fontsource/fraunces/latin-600.css';
+
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';

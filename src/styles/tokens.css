@@ -1,0 +1,92 @@
+/*
+  Design tokens for CreatersDen.
+  Source of truth: PROJECT.md "Design direction" + HANDOFF.md "Approved visual direction".
+  Do not hardcode a hex value or font stack in a component — reference these instead.
+
+  Two tokens below are BUILD-TIME DERIVATIONS, not values from PROJECT.md, because the
+  approved palette defines five roles but the build needs a sixth (elevated surface) and
+  a seventh (low-contrast divider). Recorded here and in PROJECT.md Build section:
+    --color-surface        derived by lightening --color-bg slightly, for cards/strips
+                            that need to read as a distinct plane on the dark background.
+    --color-surface-light  derived by dimming --color-text-inverse slightly, the light-mode
+                            counterpart used inside [data-surface="light"] sections.
+    --color-line            a low-opacity divider tone, not a flat hex, so it works over
+                            either surface without a second variable.
+*/
+
+:root {
+  /* ---- Color: Cinder & Ember (PROJECT.md > Design direction > Palette) ---- */
+  --color-bg: #141519; /* cutting-room graphite */
+  --color-surface: #1c1e24; /* derived: graphite lightened ~6% for elevated cards */
+  --color-text: #f3efe6; /* projector white */
+  --color-text-muted: #a6a296; /* derived: warm grey, ~6.9:1 on graphite, still clears 4.5:1 */
+  --color-accent: #f06a45; /* ember — primary accent, lead CTA, selected states */
+  --color-accent-secondary: #7fa8bc; /* steel blue — technical/process information */
+  --color-accent-tertiary: #d0a64b; /* restrained brass — sparse highlight, proof markers */
+  --color-line: rgb(243 239 230 / 14%); /* divider over dark surfaces */
+
+  /* Light editorial surface — used sparingly via [data-surface="light"], per HANDOFF's
+     "projector white as primary text AND light editorial surfaces". Inverted pairing. */
+  --color-bg-inverse: #f3efe6;
+  --color-surface-inverse: #e9e5dc; /* derived: projector white dimmed ~5% for cards */
+  --color-text-inverse: #141519;
+  --color-text-inverse-muted: #55524a;
+  --color-line-inverse: rgb(20 21 25 / 12%);
+
+  /* Ember/steel/brass keep the same hex on either surface; contrast is re-verified
+     per use since the background luminance flips (see PROJECT.md QA once audited). */
+
+  /* ---- Typography roles ---- */
+  --font-display: 'Archivo', 'Arial Narrow', sans-serif; /* uppercase grotesk, major statements */
+  --font-serif: 'Fraunces', Georgia, serif; /* editorial serif, story/pull-quote moments */
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif; /* nav, body, forms, labels */
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace; /* timecode, metadata */
+
+  /* Fluid type scale — clamp(min, preferred, max) so nothing needs a breakpoint rule
+     just to resize text. step-0 is body copy; each step up roughly follows a 1.25–1.6
+     ratio, widening at the top where the display role needs the most range. */
+  --step-0: 1rem; /* body */
+  --step-1: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem); /* lead paragraphs, labels-large */
+  --step-2: clamp(1.5rem, 1.3rem + 0.9vw, 2.25rem); /* section headings */
+  --step-3: clamp(2.25rem, 1.8rem + 2vw, 3.5rem); /* sub-hero statements */
+  --step-4: clamp(3rem, 2.2rem + 3.8vw, 5.5rem); /* hero / major campaign statements */
+  --step-5: clamp(3.75rem, 2.4rem + 6.2vw, 8rem); /* largest display moments, used sparingly */
+
+  --leading-tight: 0.92;
+  --leading-snug: 1.15;
+  --leading-normal: 1.55;
+
+  --tracking-display: -0.02em; /* tight tracking for large uppercase grotesk */
+  --tracking-label: 0.09em; /* generous tracking for small uppercase labels */
+
+  /* ---- Spacing scale ---- */
+  --space-unit: 0.5rem;
+  --space-2xs: calc(var(--space-unit) * 1); /* 8px */
+  --space-xs: calc(var(--space-unit) * 2); /* 16px */
+  --space-sm: calc(var(--space-unit) * 3); /* 24px */
+  --space-md: calc(var(--space-unit) * 5); /* 40px */
+  --space-lg: calc(var(--space-unit) * 8); /* 64px */
+  --space-xl: calc(var(--space-unit) * 13); /* 104px */
+  --space-2xl: calc(var(--space-unit) * 21); /* 168px */
+
+  /* ---- Layout ---- */
+  --content-max: 78rem;
+  --radius-sm: 2px; /* deliberately near-square — an editorial timeline system, not a soft-card one */
+
+  /* ---- Motion ---- */
+  --ease-cut: cubic-bezier(0.4, 0, 0.2, 1); /* used for hard "cut" transitions */
+  --ease-scrub: cubic-bezier(0.65, 0, 0.35, 1); /* used for playhead/scrub-style movement */
+  --duration-cut: 120ms; /* deliberately fast — reads as a cut, not a fade */
+  --duration-scrub: 420ms;
+}
+
+/* Reduced-motion mode removes continuous and scroll-linked movement per HANDOFF.md.
+   Components must gate their own animation/transition rules behind the matching
+   media query rather than relying on this alone — this only neutralizes durations
+   for anything that forgot to. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-cut: 0.01ms;
+    --duration-scrub: 0.01ms;
+  }
+}
