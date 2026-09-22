@@ -26,4 +26,4 @@ The intended repository is a new public repository named `creatersden-site` unde
 
 `https://github.com/Muhammad-Junaid-Nawaz/creatersden-site`
 
-That remote was not yet created at the time of this handoff. The previously supplied `alshedivat/al-folio` URL is a third-party commit and is not the CreatersDen repository.
+The public repository is now created and connected as the local `origin` remote. The previously supplied `alshedivat/al-folio` URL is a third-party commit and is not the CreatersDen repository.

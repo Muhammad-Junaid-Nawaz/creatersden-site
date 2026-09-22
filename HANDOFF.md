@@ -134,7 +134,7 @@ GitHub Pages cannot process forms server-side. Use a temporary mail-app/project-
 - Intended repository name: `creatersden-site`
 - Intended URL: `https://github.com/Muhammad-Junaid-Nawaz/creatersden-site`
 - Visibility: public for free GitHub Pages hosting
-- Remote status at handoff: **not yet created or connected**
+- Remote status: **created, connected as `origin`, and synchronized on `main`**
 
 Important: `https://github.com/alshedivat/al-folio/commit/ac7add47defd381e997251e5404f1ea177728ad3` is a third-party commit, not the client's repository.
 
@@ -149,4 +149,4 @@ Important: `https://github.com/alshedivat/al-folio/commit/ac7add47defd381e997251
 
 ## Continuation definition of done
 
-The first implementation milestone is complete only when the Astro site builds without errors, all listed routes exist, the approved visual system is implemented, interactions work with keyboard and reduced motion, placeholders are honest, and the result has been visually checked at desktop and mobile sizes. Publishing is a separate milestone after the repository is created and the client confirms the final GitHub action.
+The first implementation milestone is complete only when the Astro site builds without errors, all listed routes exist, the approved visual system is implemented, interactions work with keyboard and reduced motion, placeholders are honest, and the result has been visually checked at desktop and mobile sizes. Deployment is a separate milestone after the production build and GitHub Pages workflow are ready.

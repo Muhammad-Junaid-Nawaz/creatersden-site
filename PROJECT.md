@@ -1,6 +1,6 @@
 # Project: CreatersDen
 
-**Status:** Design direction approved; dedicated project folder and handoff documentation created; ready for Astro setup
+**Status:** Design direction approved; dedicated project folder, handoff documentation, and public GitHub repository created; ready for Astro setup
 **Last updated:** 2026-09-22
 
 ## Brief
@@ -18,7 +18,7 @@
 - **Existing brand (logo/colors/fonts) or creating new:** **Blocking - client asset inventory required.** No approved logo, palette, type system, or brand guide was supplied with the specification.
 - **Deadline:** **Not yet provided.**
 - **Budget for paid tools:** Zero-cost initial launch. GitHub Pages is the confirmed temporary hosting route. Cloudflare Stream is deferred because it is paid; the initial media strategy must use optimized static previews and/or separately hosted portfolio embeds.
-- **Repository:** Intended new public repository: `https://github.com/Muhammad-Junaid-Nawaz/creatersden-site`. The remote has not yet been created or connected. The supplied `alshedivat/al-folio` commit belongs to a third party and is not this project's repository.
+- **Repository:** Public repository: `https://github.com/Muhammad-Junaid-Nawaz/creatersden-site`; connected locally as `origin` with default branch `main`. The supplied `alshedivat/al-folio` commit belongs to a third party and is not this project's repository.
 
 ## Subject vocabulary
 - Timeline, playhead, cut, trim, marker, frame, timecode, bins, proxies, scopes, waveform, grade, conform, master, aspect ratio, captions, sound mix.

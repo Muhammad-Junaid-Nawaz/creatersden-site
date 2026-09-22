@@ -56,4 +56,4 @@ This is the authoritative continuation file for the CreatersDen website reposito
 
 ## Current stopping point
 
-Discovery and design approval are complete. The project-specific folder and continuity documents exist. Production code, the GitHub remote, and deployment are still pending. Begin with the Astro scaffold; do not redo the already approved design-direction exercise unless the client asks for a revision.
+Discovery and design approval are complete. The project-specific folder and continuity documents exist, and the public GitHub repository is connected as `origin` at `https://github.com/Muhammad-Junaid-Nawaz/creatersden-site`. Production code and deployment are still pending. Begin with the Astro scaffold; do not redo the already approved design-direction exercise unless the client asks for a revision.
