@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CreatersDen Design Directions</title>
+  <meta name="description" content="Four proposed visual directions for the CreatersDen multipage website.">
+  <style>
+    :root {
+      --ink: #11100e;
+      --paper: #f4f0e8;
+      --hairline: rgba(17, 16, 14, .22);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: #d8d4cc; color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+    button, a { font: inherit; }
+    a { color: inherit; }
+    .skip { position: fixed; z-index: 100; left: 1rem; top: -5rem; padding: .75rem 1rem; background: #fff; color: #000; }
+    .skip:focus { top: 1rem; }
+
+    .review-bar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: .8rem 1.25rem; background: rgba(244, 240, 232, .96); border-bottom: 1px solid #aaa49a;
+      backdrop-filter: blur(10px);
+    }
+    .review-bar strong { letter-spacing: -.03em; }
+    .review-bar nav { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .review-bar a { text-decoration: none; border: 1px solid #aaa49a; border-radius: 999px; padding: .45rem .75rem; font-size: .76rem; }
+    .review-bar a:hover, .review-bar a:focus-visible { background: #111; color: #fff; outline: none; }
+
+    .intro {
+      max-width: 1180px; margin: 0 auto; padding: 5.5rem 1.5rem 3.5rem;
+      display: grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; align-items: end;
+    }
+    .intro h1 { margin: 0; max-width: 12ch; font-size: clamp(3rem, 8vw, 7rem); line-height: .88; letter-spacing: -.075em; }
+    .intro p { margin: 0 0 .5rem; max-width: 52ch; font-size: 1.05rem; line-height: 1.55; }
+    .intro .eyebrow { margin-bottom: 1rem; text-transform: uppercase; letter-spacing: .13em; font-size: .72rem; font-weight: 800; }
+
+    .direction { min-height: 100vh; border-top: 1px solid rgba(0,0,0,.35); overflow: hidden; }
+    .direction-head {
+      display: grid; grid-template-columns: 10rem 1fr 1fr; gap: 1.5rem; align-items: start;
+      padding: 1.25rem max(1.25rem, calc((100vw - 1180px) / 2)); border-bottom: 1px solid currentColor;
+      font-size: .84rem; line-height: 1.45;
+    }
+    .direction-head p { margin: 0; }
+    .direction-head strong { display: block; margin-bottom: .25rem; text-transform: uppercase; letter-spacing: .12em; font-size: .67rem; }
+    .direction-label { font-weight: 900; font-size: 1.3rem; letter-spacing: -.04em; }
+    .stage { min-height: calc(100vh - 124px); display: grid; grid-template-rows: auto 1fr auto; }
+    .site-nav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.2rem max(1.25rem, calc((100vw - 1180px) / 2)); }
+    .site-nav .logo { font-weight: 900; letter-spacing: -.06em; text-decoration: none; }
+    .site-nav .links { display: flex; align-items: center; gap: 1.2rem; font-size: .78rem; }
+    .site-nav .links a { text-decoration: none; }
+    .site-nav .links a:last-child { padding: .65rem .9rem; border: 1px solid currentColor; }
+    .hero { width: min(1180px, calc(100% - 2.5rem)); margin: auto; }
+    .hero h2 { margin: 0; text-wrap: balance; }
+    .hero p { max-width: 54ch; line-height: 1.55; }
+    .actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.6rem; }
+    .action { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: .8rem 1.1rem; border: 1px solid currentColor; text-decoration: none; font-weight: 800; }
+    .metric-row { width: min(1180px, calc(100% - 2.5rem)); margin: 1rem auto 1.5rem; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid currentColor; }
+    .metric { padding: 1rem 0; }
+    .metric + .metric { padding-left: 1rem; border-left: 1px solid currentColor; }
+    .metric b { display: block; font-size: clamp(1.5rem, 3vw, 2.8rem); letter-spacing: -.05em; }
+    .metric span { font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; }
+    .draft { display: inline-flex; margin-left: .6rem; padding: .25rem .45rem; border: 1px solid currentColor; border-radius: 999px; font-size: .56rem; letter-spacing: .12em; vertical-align: middle; }
+
+    /* A — Cut Room */
+    .a { background: #080908; color: #ecebe5; font-family: Arial Black, Arial, sans-serif; }
+    .a .direction-head { color: #b6b8b1; border-color: #353832; font-family: Arial, sans-serif; }
+    .a .stage { position: relative; }
+    .a .stage::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 11px; background: #b9ff39; }
+    .a .site-nav { text-transform: uppercase; letter-spacing: .12em; }
+    .a .hero { position: relative; padding: 8vh 0 6vh; }
+    .a .hero::after { content: "01:18:24:12"; position: absolute; right: 0; top: 1rem; color: #b9ff39; font: 700 .72rem/1 monospace; letter-spacing: .1em; }
+    .a h2 { max-width: 10ch; font-size: clamp(4rem, 11vw, 9rem); line-height: .82; letter-spacing: -.085em; text-transform: uppercase; }
+    .a h2 em { display: block; color: #b9ff39; font-style: normal; }
+    .a .hero p { font-family: Arial, sans-serif; color: #b6b8b1; }
+    .a .action.primary { background: #b9ff39; color: #080908; border-color: #b9ff39; }
+    .a .metric-row { border-color: #55594f; color: #b6b8b1; }
+    .a .metric b { color: #ecebe5; }
+    .a .metric + .metric { border-color: #55594f; }
+
+    /* B — Mastering House */
+    .b { background: #f0eadc; color: #16283d; font-family: Georgia, 'Times New Roman', serif; }
+    .b .direction-head { background: #e8dfcd; border-color: #16283d; font-family: Arial, sans-serif; }
+    .b .site-nav { border-bottom: 1px solid #16283d; }
+    .b .site-nav .logo { font-family: Arial Black, Arial, sans-serif; text-transform: uppercase; }
+    .b .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 2rem; padding: 8vh 0 4vh; align-items: center; }
+    .b h2 { font-size: clamp(3.8rem, 8vw, 7.4rem); line-height: .88; letter-spacing: -.065em; font-weight: 400; }
+    .b h2 em { color: #d73a2f; font-style: italic; }
+    .b .hero-copy p { font-family: Arial, sans-serif; }
+    .b .frame-stack { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; transform: rotate(1.5deg); }
+    .b .frame { aspect-ratio: 4/3; padding: .7rem; background: #16283d; color: #f0eadc; display: flex; align-items: flex-end; font: 800 .66rem/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .b .frame:nth-child(2) { background: #d73a2f; transform: translateY(2rem); }
+    .b .frame:nth-child(3) { background: #2c62d6; }
+    .b .frame:nth-child(4) { background: #d8b63d; transform: translateY(2rem); color: #16283d; }
+    .b .action.primary { background: #16283d; color: #f0eadc; }
+
+    /* C — Signal Frame */
+    .c { background: #fbfaf7; color: #121212; font-family: Arial, Helvetica, sans-serif; }
+    .c .direction-head { border-color: #121212; }
+    .c .site-nav { padding-top: .8rem; padding-bottom: .8rem; border-bottom: 1px solid #121212; }
+    .c .site-nav .logo { font-size: 1.35rem; }
+    .c .hero { display: grid; grid-template-columns: 1fr .9fr; gap: clamp(2rem, 7vw, 8rem); padding: 10vh 0 5vh; }
+    .c h2 { max-width: 11ch; font-size: clamp(3.5rem, 7.5vw, 7rem); line-height: .92; letter-spacing: -.075em; font-weight: 900; }
+    .c .hero-copy { align-self: end; }
+    .c .hero-copy .proof { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; }
+    .c .proof div { border-top: 3px solid #ff8b2d; padding-top: .65rem; font-size: .78rem; line-height: 1.4; }
+    .c .action.primary { background: #ff8b2d; border-color: #ff8b2d; }
+    .c .metric-row { background: #121212; color: #fff; padding: 0 1rem; }
+    .c .metric + .metric { border-color: #6b6b6b; }
+
+    /* D — The Den */
+    .d { background: #17151e; color: #f2eadb; font-family: Georgia, 'Times New Roman', serif; }
+    .d .direction-head { background: #bcd35f; color: #17151e; border-color: #17151e; font-family: Arial, sans-serif; }
+    .d .site-nav { font-family: Arial, sans-serif; }
+    .d .site-nav .logo { color: #bcd35f; font-size: 1.25rem; }
+    .d .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 3rem; padding: 7vh 0 4vh; align-items: center; }
+    .d h2 { font-size: clamp(4rem, 9vw, 8rem); line-height: .83; letter-spacing: -.075em; font-weight: 400; }
+    .d h2 em { color: #bcd35f; font-style: italic; }
+    .d .timeline { position: relative; padding: 2rem 0 2rem 2.2rem; border-left: 2px solid #bcd35f; font-family: Arial, sans-serif; }
+    .d .timeline::before { content: ""; position: absolute; left: -.48rem; top: 26%; width: .8rem; height: .8rem; background: #bcd35f; border-radius: 50%; box-shadow: 0 7rem 0 #e46a4a, 0 14rem 0 #76a7c8; }
+    .d .timeline p { margin: 0 0 2.2rem; padding-bottom: 1rem; border-bottom: 1px solid #48434f; }
+    .d .timeline b { display: block; color: #bcd35f; font: 700 .66rem/1.2 monospace; letter-spacing: .1em; margin-bottom: .4rem; }
+    .d .action.primary { background: #bcd35f; border-color: #bcd35f; color: #17151e; }
+    .d .metric-row { border-color: #57515e; }
+    .d .metric + .metric { border-color: #57515e; }
+
+    @media (max-width: 760px) {
+      .review-bar { align-items: flex-start; }
+      .review-bar > span { display: none; }
+      .intro, .direction-head, .b .hero, .c .hero, .d .hero { grid-template-columns: 1fr; }
+      .direction-head { gap: .7rem; }
+      .direction-head p:last-child { padding-top: .7rem; border-top: 1px solid currentColor; }
+      .site-nav .links a:not(:last-child) { display: none; }
+      .b .hero { padding-top: 5vh; }
+      .b .frame-stack { max-width: 28rem; }
+      .metric-row { grid-template-columns: 1fr; }
+      .metric + .metric { padding-left: 0; border-left: 0; border-top: 1px solid currentColor; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#directions">Skip to directions</a>
+  <header class="review-bar">
+    <strong>CreatersDen / Direction Review</strong>
+    <span>Four systems. Same brief.</span>
+    <nav aria-label="Jump to a direction">
+      <a href="#a">A</a><a href="#b">B</a><a href="#c">C</a><a href="#d">D</a>
+    </nav>
+  </header>
+
+  <main id="directions">
+    <section class="intro" aria-labelledby="review-title">
+      <div>
+        <p class="eyebrow">Static multipage website / visual exploration</p>
+        <h1 id="review-title">Choose the world CreatersDen lives in.</h1>
+      </div>
+      <p>Each option uses the same promise: expert post-production that turns raw footage into commercially effective stories. Headlines are draft copy. References contribute principles only; none of their assets or layouts are reproduced.</p>
+    </section>
+
+    <section class="direction a" id="a" aria-labelledby="a-title">
+      <div class="direction-head">
+        <div class="direction-label">A / Cut Room</div>
+        <p><strong>Source principle</strong>Myriad's theatrical restraint and motion-led confidence, translated into an editing timeline rather than its rainbow identity.</p>
+        <p><strong>Tradeoff</strong>Most cinematic, but it needs a genuinely excellent showreel and disciplined motion to avoid feeling sparse or severe.</p>
+      </div>
+      <div class="stage">
+        <nav class="site-nav" aria-label="Direction A preview navigation">
+          <a class="logo" href="#">CREATERS/DEN</a>
+          <div class="links"><a href="#">Work</a><a href="#">Services</a><a href="#">Process</a><a href="#">Estimate a project</a></div>
+        </nav>
+        <div class="hero">
+          <h2 id="a-title">Every frame <em>earns its place.</em><span class="draft">Draft copy</span></h2>
+          <p>Editorial precision, expressive motion, clean sound, and final masters built for every screen your audience watches.</p>
+          <div class="actions"><a class="action primary" href="#">Build your estimate</a><a class="action" href="#">Watch selected work ↗</a></div>
+        </div>
+        <div class="metric-row"><div class="metric"><b>9:16</b><span>Social cutdowns</span></div><div class="metric"><b>16:9</b><span>Campaign masters</span></div><div class="metric"><b>48h</b><span>Express option</span></div></div>
+      </div>
+    </section>
+
+    <section class="direction b" id="b" aria-labelledby="b-title">
+      <div class="direction-head">
+        <div class="direction-label">B / Mastering House</div>
+        <p><strong>Source principle</strong>Sandwich's human voice and memorable identity, recast as a warm editorial studio with tactile frame sequences.</p>
+        <p><strong>Tradeoff</strong>Most distinctive and personable, but the editorial styling must stay sharp enough to signal commercial reliability.</p>
+      </div>
+      <div class="stage">
+        <nav class="site-nav" aria-label="Direction B preview navigation">
+          <a class="logo" href="#">CreatersDen</a>
+          <div class="links"><a href="#">Work</a><a href="#">Services</a><a href="#">Process</a><a href="#">Start a project</a></div>
+        </nav>
+        <div class="hero">
+          <div>
+            <h2 id="b-title">The story was always there. <em>We find the cut.</em><span class="draft">Draft copy</span></h2>
+            <div class="actions"><a class="action primary" href="#">See what we make</a><a class="action" href="#">Get a working estimate</a></div>
+          </div>
+          <div class="frame-stack" aria-label="Abstract frame sequence">
+            <div class="frame">01 / Raw</div><div class="frame">02 / Rhythm</div><div class="frame">03 / Grade</div><div class="frame">04 / Master</div>
+          </div>
+        </div>
+        <div class="metric-row"><div class="metric"><b>Cut</b><span>Pacing and narrative</span></div><div class="metric"><b>Color</b><span>Finish and consistency</span></div><div class="metric"><b>Sound</b><span>Weight and clarity</span></div></div>
+      </div>
+    </section>
+
+    <section class="direction c" id="c" aria-labelledby="c-title">
+      <div class="direction-head">
+        <div class="direction-label">C / Signal Frame</div>
+        <p><strong>Source principle</strong>Lemonlight's service clarity plus Vidico's estimate-led conversion and proof, compressed into a cleaner system.</p>
+        <p><strong>Tradeoff</strong>Easiest to understand and convert, but it risks feeling like a polished category leader unless the real work and voice add specificity.</p>
+      </div>
+      <div class="stage">
+        <nav class="site-nav" aria-label="Direction C preview navigation">
+          <a class="logo" href="#">CreatersDen.</a>
+          <div class="links"><a href="#">Work</a><a href="#">Services</a><a href="#">How it works</a><a href="#">Get estimate</a></div>
+        </nav>
+        <div class="hero">
+          <h2 id="c-title">Post-production that makes the work perform.<span class="draft">Draft copy</span></h2>
+          <div class="hero-copy">
+            <p>From first assembly to final delivery: editing, color, sound, motion graphics, captions, and platform-ready exports from one focused team.</p>
+            <div class="actions"><a class="action primary" href="#">Get an estimate in 2 minutes</a><a class="action" href="#">View case studies</a></div>
+            <div class="proof"><div><b>Clear scope</b><br>Know deliverables and turnaround before kickoff.</div><div><b>Built to repurpose</b><br>One master, planned cutdowns, every ratio.</div></div>
+          </div>
+        </div>
+        <div class="metric-row"><div class="metric"><b>01</b><span>Footage in</span></div><div class="metric"><b>02</b><span>Collaborative revisions</span></div><div class="metric"><b>03</b><span>Masters out</span></div></div>
+      </div>
+    </section>
+
+    <section class="direction d" id="d" aria-labelledby="d-title">
+      <div class="direction-head">
+        <div class="direction-label">D / The Den</div>
+        <p><strong>Synthesis</strong>An original editorial-timeline system: Myriad's drama, Lemonlight's clarity, Sandwich's voice, and Vidico's commercial proof resolved around post-production craft.</p>
+        <p><strong>Tradeoff</strong>Strongest brand territory and my recommendation, but it needs custom frame assets and consistent timecode/timeline rules to stay coherent.</p>
+      </div>
+      <div class="stage">
+        <nav class="site-nav" aria-label="Direction D preview navigation">
+          <a class="logo" href="#">CREATERSDEN / POST</a>
+          <div class="links"><a href="#">Selected cuts</a><a href="#">Capabilities</a><a href="#">The process</a><a href="#">Scope your edit</a></div>
+        </nav>
+        <div class="hero">
+          <div>
+            <h2 id="d-title">Raw footage in. <em>Real momentum out.</em><span class="draft">Draft copy</span></h2>
+            <p>We shape pace, picture, sound, and motion into edits people finish - and brands can put to work everywhere.</p>
+            <div class="actions"><a class="action primary" href="#">Scope your edit</a><a class="action" href="#">Enter the workroom</a></div>
+          </div>
+          <div class="timeline" aria-label="Four-stage process preview">
+            <p><b>00:00:00:00</b>Ingest and editorial map</p>
+            <p><b>00:18:12:08</b>Story assembly and pacing</p>
+            <p><b>01:04:42:16</b>Color, sound, motion</p>
+            <p><b>01:18:24:12</b>Masters and cutdowns</p>
+          </div>
+        </div>
+        <div class="metric-row"><div class="metric"><b>One brief</b><span>A coherent edit system</span></div><div class="metric"><b>Every ratio</b><span>9:16 / 1:1 / 16:9</span></div><div class="metric"><b>One handoff</b><span>Organized final masters</span></div></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
