@@ -294,6 +294,7 @@ const workPreview = [
 	}
 
 	.proof__card {
+		min-width: 0; /* without this, aspect-ratio + grid's default min-width:auto let this item overflow its 1fr track — confirmed live: was rendering ~1213px wide instead of ~384px, causing page-wide horizontal overflow */
 		aspect-ratio: 16 / 9;
 		background: var(--color-surface);
 		border: 1px dashed var(--color-line);

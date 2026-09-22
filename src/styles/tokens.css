@@ -50,7 +50,7 @@
   --step-2: clamp(1.5rem, 1.3rem + 0.9vw, 2.25rem); /* section headings */
   --step-3: clamp(2.25rem, 1.8rem + 2vw, 3.5rem); /* sub-hero statements */
   --step-4: clamp(3rem, 2.2rem + 3.8vw, 5.5rem); /* hero / major campaign statements */
-  --step-5: clamp(3.75rem, 2.4rem + 6.2vw, 8rem); /* largest display moments, used sparingly */
+  --step-5: clamp(2.5rem, 1.5rem + 4vw, 5.5rem); /* largest display moments, used sparingly */
 
   --leading-tight: 0.92;
   --leading-snug: 1.15;
