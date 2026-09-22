@@ -1,6 +1,6 @@
 # Project: CreatersDen
 
-**Status:** Astro scaffolded; design tokens, structural shell, and home page (representative route) built and production-build-verified; seven routes + estimator + QA + deploy still pending
+**Status:** All Brief/Constraints blocking items resolved. Home page built; current milestone is a published GitHub Pages link with home presentable and remaining routes as honest "under construction" pages (client's stated priority — no fixed deadline, but wants a live link soon without compromising quality)
 **Last updated:** 2026-09-22
 
 ## Brief
@@ -8,15 +8,15 @@
 - **Audience (who visits, what were they doing 5 min before):** DTC brand teams, tech and SaaS marketers, content creators, and advertising agencies comparing production partners, reviewing reels and case studies, or trying to estimate scope and turnaround.
 - **Primary action (the one thing a visitor should do):** **Proposal awaiting confirmation:** complete the scope estimator and continue into a pre-populated project inquiry. Secondary action: view relevant work and case studies.
 - **Pages/sections needed (rough shape, not final sitemap):** Home; Work index; individual case studies; Services; Process; Estimate; About; Contact.
-- **Feel (3 adjectives, each contrasted against something specific):** **Blocking - client confirmation required.** Proposed starting point: cinematic rather than decorative; exacting rather than corporate; energetic rather than noisy.
+- **Feel (3 adjectives, each contrasted against something specific):** Cinematic rather than decorative; exacting rather than corporate; energetic rather than noisy. Confirmed 2026-09-22.
 
 ## Constraints
-- **Content owner after launch (and technical level):** **Blocking - not yet confirmed.** The specified Markdown/MDX and Git workflow assumes a technically comfortable maintainer.
-- **Track decision (static/WordPress) and why:** Static, explicitly confirmed by the client. The project will live in the client's GitHub repository and deploy to Cloudflare.
+- **Content owner after launch (and technical level):** Muhammad Junaid Nawaz (repository owner) maintains the site directly via this GitHub repository, using git. Comfortable following a guided git workflow. Confirmed 2026-09-22.
+- **Track decision (static/WordPress) and why:** Static, explicitly confirmed by the client. The project will live in the client's GitHub repository and deploy to Cloudflare. **Note (2026-09-22):** client intends to maintain the static site directly via GitHub until a dedicated domain is purchased, at which point a move to WordPress is possible but not yet decided. Not a track change — static remains the build target — but keep content/copy reasonably portable (avoid Astro-specific structures that would make a future WordPress migration harder than it needs to be) where doing so costs nothing now.
 - **Page architecture (multi-page/single-page scroll) and why:** Multi-page, explicitly confirmed by the client. Separate service, work, process, estimate, about, contact, and case-study URLs support substantial content, sharing, and search visibility.
 - **Hard requirements (payments, bookings, members area, languages, blog):** Filterable work gallery; short hover-scrub proxies; full video playback; case-study pages; before/after comparison slider; four-step scope/turnaround estimator; contact form populated by estimator results; bot protection; optional Cal.com/Calendly scheduling; per-page SEO and social metadata; sitemap; structured data; responsive and accessible interactions.
 - **Existing brand (logo/colors/fonts) or creating new:** **Blocking - client asset inventory required.** No approved logo, palette, type system, or brand guide was supplied with the specification.
-- **Deadline:** **Not yet provided.**
+- **Deadline:** No hard date. Client asked for a published link within the next week with the home page presentable; remaining routes may show "under construction" rather than errors in the meantime. Explicit instruction: do not compromise quality for speed. Confirmed 2026-09-22.
 - **Budget for paid tools:** Zero-cost initial launch. GitHub Pages is the confirmed temporary hosting route. Cloudflare Stream is deferred because it is paid; the initial media strategy must use optimized static previews and/or separately hosted portfolio embeds.
 - **Repository:** Public repository: `https://github.com/Muhammad-Junaid-Nawaz/creatersden-site`; connected locally as `origin` with default branch `main`. The supplied `alshedivat/al-folio` commit belongs to a third party and is not this project's repository.
 

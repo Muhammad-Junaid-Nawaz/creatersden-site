@@ -1,7 +1,7 @@
 # CreatersDen Progress Report
 
 **Status date:** 2026-09-22  
-**Project phase:** Astro scaffold, design tokens, structural shell, and home page built; six routes + estimator + QA + deploy remain
+**Project phase:** All placeholder routes + deploy workflow built; ready to push, enable GitHub Pages, and go live with home page presentable and the rest honestly marked in-progress
 
 ## What has been completed
 
@@ -68,25 +68,33 @@ Preview artifacts are retained in [`docs/design-previews`](docs/design-previews/
 - Visually rendered the home page and **caught two real bugs**: a missing-slash favicon href, and a mispositioned timeline marker (fixed by simplifying a calc() to a literal value).
 - **Verification gap, flagged rather than hidden:** the only rendering tool available in this environment is an old bundled-Qt build of `wkhtmltoimage` (no real Chromium/Firefox/Safari could be installed — apt only has snap-wrapped transitional packages that don't run headless here). It doesn't support flexbox `gap` and cannot honor a strict mobile viewport (`--disable-smart-width` unsupported). Desktop-width rendering is reasonably trustworthy; mobile/responsive behavior is implemented per standard CSS but not yet confirmed in a real browser.
 
+### 8. Publish-priority milestone: placeholder routes + deploy workflow (this session)
+
+- Client confirmed: no hard deadline, but wants a published link soon with the home page presentable; other routes can honestly say "in progress" rather than 404. Explicit instruction not to compromise quality for speed.
+- Resolved the three remaining `PROJECT.md` blocking items: content owner/technical level (client will maintain via this GitHub repo directly), Feel adjectives (kept as proposed, client agreed), deadline (recorded as above).
+- Built `ComingSoon.astro` (shared, on-brand placeholder component) and used it for `/work/`, `/services/`, `/process/`, `/estimate/`, `/about/`, `/contact/`, plus a proper custom `404.astro` — all using real BaseLayout chrome (nav/footer/skip-link/meta) so nothing feels broken, and none fabricate contact details or content.
+- Added `.github/workflows/deploy.yml` using Astro's official `withastro/action@v2` + `actions/deploy-pages@v4` pattern, verified against current docs.
+- Production build verified clean: all 8 pages (404 + 7 routes) build with no errors; base-aware links confirmed correct in output HTML; visually re-rendered one placeholder route.
+
 ## What has not been completed
 
-- Six of eight routes (`/work/`, two case-study templates, `/services/`, `/process/`, `/estimate/`, `/about/`, `/contact/`) and the custom 404 page.
-- The four-step estimator's actual logic (only a CTA linking to `/estimate/` exists so far).
+- Real content for all six placeholder routes, and the estimator's actual logic.
 - Sitemap, structured data, and full Open Graph image handling.
-- No production images, reels, preview proxies, project metrics, testimonials, client logos, or team assets have been supplied.
+- GitHub Pages hasn't been enabled in repository settings yet, and the Actions workflow hasn't run — this is the very next step once this commit is on `main`.
+- No production images, reels, preview proxies, project metrics, testimonials, client logos, or team assets have been supplied (checklist sent to client 2026-09-22).
 - No final email address, form endpoint, scheduling URL, privacy copy, or legal copy has been supplied.
-- Nothing has been pushed to GitHub yet this session — Claude cannot push (no repository credentials, and per its own operating rules wouldn't handle them if offered); the working tree is committed locally only, pending your push.
-- No GitHub Pages deployment has been run; no custom domain purchased or configured.
-- Mobile/responsive behavior is implemented but not yet confirmed in a real browser (see verification gap above) — worth a quick manual check before this milestone is considered fully done.
+- No custom domain has been purchased or configured.
+- Mobile/responsive behavior still not confirmed in a real browser from Claude's own sandbox — but a Claude-in-Chrome browser session is now available and connected, which can close this gap once something is live to check.
 
 ## Immediate next work
 
-1. Build the remaining six routes and the two case-study templates.
-2. Implement the client-side estimator without inventing prices.
-3. Run responsive, keyboard, contrast, link, metadata, and build QA (`web-qa-audit`) — including a real-browser mobile check to close the gap noted above.
-4. Add sitemap, structured data, and full per-page OG metadata.
-5. Add the GitHub Pages Actions workflow, then enable Pages.
-6. Connect a purchased custom domain later.
+1. Get this commit merged into `main` and pushed (client's local git, same workflow as before).
+2. Enable GitHub Pages (Settings → Pages → Source: GitHub Actions) and confirm the Actions run succeeds.
+3. Verify the live `.github.io` URL in a real browser (desktop + mobile widths) — first trustworthy visual QA pass of this project.
+4. As client-supplied assets arrive in `public/media/`, replace placeholder routes with real content one at a time.
+5. Build the estimator's actual logic once scope/turnaround rules are supplied.
+6. Full `web-qa-audit` pass before calling any route launch-ready.
+7. Connect a purchased custom domain later (client's stated plan: maintain on GitHub short-term, possible move to WordPress once a domain is bought — noted in `PROJECT.md`, not yet decided).
 
 ## Repository publication completed
 

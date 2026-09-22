@@ -1,0 +1,64 @@
+---
+interface Props {
+	heading: string;
+	body: string;
+}
+
+const { heading, body } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="coming-soon">
+	<p class="coming-soon__tag">Status: in progress</p>
+	<h1 class="coming-soon__heading">{heading}</h1>
+	<p class="coming-soon__body">{body}</p>
+	<a class="coming-soon__link" href={`${base}/`}>← Back to home</a>
+</section>
+
+<style>
+	.coming-soon {
+		max-width: 48rem;
+		margin: 0 auto;
+		padding: var(--space-2xl) var(--space-sm) var(--space-2xl);
+		text-align: center;
+		display: grid;
+		gap: var(--space-sm);
+		justify-items: center;
+	}
+
+	.coming-soon__tag {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		letter-spacing: var(--tracking-label);
+		text-transform: uppercase;
+		color: var(--color-accent-secondary);
+	}
+
+	.coming-soon__heading {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--step-4);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-display);
+		text-transform: uppercase;
+	}
+
+	.coming-soon__body {
+		max-width: 42ch;
+		font-size: var(--step-1);
+		color: var(--color-text-muted);
+	}
+
+	.coming-soon__link {
+		margin-top: var(--space-xs);
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 0.9rem;
+		text-decoration: none;
+		color: var(--color-accent);
+	}
+
+	.coming-soon__link:hover {
+		text-decoration: underline;
+	}
+</style>
