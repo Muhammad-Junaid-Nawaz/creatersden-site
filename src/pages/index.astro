@@ -415,8 +415,13 @@ const workPreview = [
 
 	.capabilities__n {
 		font-family: var(--font-mono);
+		font-weight: 700;
 		font-size: 0.9rem;
-		color: var(--surface-text-muted);
+		color: var(--color-accent-on-light);
+	}
+
+	.capabilities__item:nth-child(even) .capabilities__n {
+		color: var(--color-accent-secondary-on-light);
 	}
 
 	.capabilities__item h3 {

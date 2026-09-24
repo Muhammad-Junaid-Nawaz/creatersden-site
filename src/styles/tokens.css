@@ -25,6 +25,15 @@
   --color-accent-tertiary: #d0a64b; /* restrained brass — sparse highlight, proof markers */
   --color-line: rgb(243 239 230 / 14%); /* divider over dark surfaces */
 
+  /* Text-safe darkened tints — for accent-colored TEXT on the light surface only.
+     The raw accent hexes fail even the relaxed 3:1 large-text threshold against
+     projector white (ember 2.67:1, steel 2.22:1 — computed, not assumed). These are
+     the same hues darkened just enough to clear 4.5:1 normal-text contrast:
+     ember→70% brightness (4.96:1), steel→60% brightness (5.44:1). Dark-surface use
+     of the raw accent colors is unaffected — this is additive, light-surface-only. */
+  --color-accent-on-light: #a84a30;
+  --color-accent-secondary-on-light: #4c6470;
+
   /* Surface-aware alias: components should reference --surface-text-muted rather than
      --color-text-muted directly, so the same component works correctly on either
      surface. Redefined under [data-surface="light"] below. */
