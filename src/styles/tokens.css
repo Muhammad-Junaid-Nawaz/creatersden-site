@@ -25,6 +25,11 @@
   --color-accent-tertiary: #d0a64b; /* restrained brass — sparse highlight, proof markers */
   --color-line: rgb(243 239 230 / 14%); /* divider over dark surfaces */
 
+  /* Surface-aware alias: components should reference --surface-text-muted rather than
+     --color-text-muted directly, so the same component works correctly on either
+     surface. Redefined under [data-surface="light"] below. */
+  --surface-text-muted: var(--color-text-muted);
+
   /* Light editorial surface — used sparingly via [data-surface="light"], per HANDOFF's
      "projector white as primary text AND light editorial surfaces". Inverted pairing. */
   --color-bg-inverse: #f3efe6;

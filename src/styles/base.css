@@ -100,9 +100,19 @@ button {
 }
 
 /* ---- Light editorial surface inversion ---- */
+/*
+  IMPORTANT — verified via WCAG relative-luminance calc, not assumed:
+  none of the three accents (ember 2.67:1, steel 2.22:1, brass 1.98:1) clear even
+  3:1 against this light background. HANDOFF.md's contrast table only checked them
+  against graphite. On a light surface, ember/steel/brass may ONLY be used as a
+  FILL with dark text on top (e.g. an ember button with graphite text — same pair,
+  reversed roles, still ~6-8:1) — never as standalone text color or a border/icon
+  color directly on this background.
+*/
 [data-surface='light'] {
   background: var(--color-bg-inverse);
   color: var(--color-text-inverse);
+  --surface-text-muted: var(--color-text-inverse-muted);
 }
 
 /* ---- Screen-reader-only utility, for labels that shouldn't be visible ---- */
