@@ -76,24 +76,55 @@ Preview artifacts are retained in [`docs/design-previews`](docs/design-previews/
 - Added `.github/workflows/deploy.yml` using Astro's official `withastro/action@v2` + `actions/deploy-pages@v4` pattern, verified against current docs.
 - Production build verified clean: all 8 pages (404 + 7 routes) build with no errors; base-aware links confirmed correct in output HTML; visually re-rendered one placeholder route.
 
+### 9. Hero showreel frame — replaces process timeline (2026-09-28, local changes only, not yet committed)
+
+- Client-approved spec: replace the hero's right-hand process timeline with a prominent 16:9 showreel frame, keep headline/copy/CTA on the left, retain the three-item benefits strip.
+- Removed the `stages` data array and `<ol class="timeline">` markup plus all `.timeline*` CSS from `src/pages/index.astro`. That content isn't lost — it's a natural fit for the future `/process/` route and remains in git history (pre-change commit `0c4271e`).
+- Added `src/components/ShowreelFrame.astro`: a 16:9 frame with near-square corners (`--radius-sm`), a subtle border, restrained ember viewfinder-corner marks (not a play icon), and a small monospace "Studio showreel" label.
+- **Media state check performed:** searched the whole repo (`public/`, no `.mp4`/`.webm`/`.mov` anywhere) — no showreel footage or poster stills have been supplied yet. Per the client's own instruction for this state, the frame renders an honest static placeholder ("Showreel pending / Real project footage to come.") with no functioning-looking play control, and is correctly excluded from the Tab order (verified live — Tab moves from "See selected work" straight to the next section's link, nothing focuses on the placeholder).
+- Deliberately did **not** build the accessible video-modal system (muted inline preview, full-screen player, Escape-to-close, focus restoration, sound-after-interaction) in this pass — there's no real video to wire it to yet, and building that interaction with nothing to test against would be untestable dead code. Flagged below as the next step once real media arrives.
+- Rebalanced `.hero__grid` from `1.2fr 0.8fr` to `1fr 1fr` so the video reads as substantial, and reduced `.hero` top padding from `--space-2xl` to `--space-lg` so the primary CTA sits higher in the viewport.
+- Verified with a real Chromium (Playwright, headless) at exactly 390px, 768px, 1024px, and 1440px: headline wraps deliberately, CTA visible early, video stays within viewport with no horizontal overflow, mobile stacking order is headline → copy → CTA → video → benefits strip (confirmed via full-page screenshot, not just element-clipped). Keyboard Tab order confirmed correct. `prefers-reduced-motion: reduce` confirmed harmless (frame is fully static — nothing to gate).
+- Production build (`npm run build`) succeeds with no errors.
+- **Not committed, not pushed, not deployed** — client's explicit instruction for this task was "Local changes only. Do not commit, push, deploy, trigger GitHub workflows, or modify GitHub settings without my explicit instruction." Changes exist only as uncommitted working-tree edits in the local clone plus this new untracked component file, pending the client's review and sign-off before any git action.
+
+### 10. Real media supplied and wired: showreel, logo, favicon (2026-09-28, local changes only, not yet committed)
+
+- Client supplied real assets via the linked-computer device bridge into `D:\CLAUDE\creatersden-site\public\media\` — logo, showreel footage, team headshots/bios, and work stills — with the instruction to inspect, embed what's ready, and stop short of pushing.
+- **Showreel (`public/media/misc/Hero Index video.mp4`, 1920×1080, 53s, 245MB source, not committed as-is):** confirmed 60fps/H.264/36.7Mbps — far too heavy to ship. Pulled the poster frame at exactly 00:00:22 per the client's instruction (verified pixel-identical to the reference screenshot they sent), then produced three web-delivery derivatives with `ffmpeg`, all committed under `public/media/showreel/`:
+  - `poster.jpg` / `poster.webp` — the 22s frame, 1600px wide (132KB / 63KB)
+  - `preview.mp4` — muted 8s loop (15s–23s), 960px wide, no audio track (~1MB)
+  - `full.mp4` — the complete 53s reel, still 1920×1080, re-encoded to ~23MB (from 245MB)
+  - The original 245MB source file was **not** committed — it only exists in the client's own folder and this session's scratch space, not in git.
+- **`ShowreelFrame.astro` rebuilt** (replacing the honest-placeholder version from §9) into the full interactive component the original spec asked for: poster shown by default; if the visitor hasn't set `prefers-reduced-motion` and isn't on a save-data connection, the muted preview autoplays with a visible pause control; "Play showreel" opens the full video in an accessible dialog — sound enabled only because that click is the interaction gesture, Escape and a close button both dismiss it, focus moves to the dialog on open and restores to the trigger button on close, and Tab is trapped inside the dialog while open. All verified live with headless Chromium: tab order is correct (nothing extraneous gets focus), `prefers-reduced-motion: reduce` shows the static poster only with the preview and pause control both absent, and the modal opens unmuted/playing with focus on its close button.
+- **Logo — naming discrepancy found and resolved live:** the first logo file the client supplied read "**Creator's Den**" (apostrophe) in both the SVG's `aria-label` and the visible wordmark, conflicting with "CreatersDen" used everywhere else (repo name, live URL path, all copy, meta tags). Flagged it rather than guessing; the client corrected and re-supplied the logo mid-session with the wordmark fixed to "CREATERSDEN" (`public/media/logo/creatersden-cleaned.svg` / `creatersden-preview.png`) — matches site-wide naming now, no further action needed there.
+- **Logo wired in:** the supplied lockup has graphite wordmark text on a white background rect, which isn't legible on our dark graphite chrome, so rather than repaint the client's actual wordmark colors, extracted just the colorful emblem (the hexagonal play-mark, all five gradients preserved) into a standalone `public/media/logo/creatersden-icon.svg` with a tightened viewBox and no background rect. That icon now sits beside the existing text-based "CREATERSDEN" wordmark (already styled correctly in our own type system) in both `SiteHeader.astro` and `SiteFooter.astro`. The full-color lockup PNG/SVG as supplied is also in the repo for any future light-surface use, just not wired in yet.
+- **Favicon replaced:** the previous `favicon.svg`/`favicon.ico` were a generic placeholder glyph (unrelated to the client's brand) from early scaffolding. Rendered the new emblem SVG to a transparent PNG via headless Chromium (no `rsvg-convert` available in this sandbox) and rebuilt both `favicon.svg` (emblem, cropped viewBox) and `favicon.ico` (proper multi-res 16/32/48px .ico via ImageMagick) from the client's real logo.
+- **Other supplied assets inventoried and copied into `public/media/` as source files, but deliberately not yet wired into any page** (this was a large asset drop; wiring these means new page-content decisions the client hasn't been asked about yet — see Immediate next work):
+  - `public/media/team/` — real headshots for Hamza Babar and Urooj Zafar (Urooj's as a designed PDF one-pager, not a plain photo), plus real bios/service lists in `.docx`/`.pdf` for three editors: Humza Babar, Syed Yasher Ali, and Urooj Zafar. **No photo was supplied for Yasher Ali.** Note the file is named "Hamza Babar" but his own bio doc spells it "Humza Babar" — flagged, not resolved, client should confirm the correct spelling before this goes on the About page.
+  - `public/media/work/` — six real project still images (`1.PNG`–`6.PNG`, ~3.3MB total, copied in) plus six real project video files in the client's own folder (`1.mp4`, `final (1).mp4`, `Groovetie.mp4`, `launching a brand_1.mp4`, `Real Estate 2.mp4`, `shauny_weise.mp4`, totaling ~425MB) that were **not** staged or copied into this repo this session — out of scope for today's task, and each would need the same "find the real moment, transcode for web" treatment the showreel got before going anywhere near the `/work/` page.
+- Production build (`npm run build`) succeeds with no errors. Total new committed media: ~33MB (`public/media/`), reasonable for one commit.
+- **Not committed, not pushed, not deployed** — same explicit instruction as §9 ("local changes only... without my explicit instruction"), reaffirmed this session for the media work specifically ("when finalized I can push it online with your guidance"). Everything above exists only as uncommitted working-tree changes plus new untracked files, pending the client's review.
+
 ## What has not been completed
 
-- Real content for all six placeholder routes, and the estimator's actual logic.
+- The About and Work pages themselves — real content now exists for both (team bios/headshots, project stills) but hasn't been built into page copy/layout; that's a content-and-design decision, not just an asset-wiring one (see §10 and Immediate next work).
+- The six real work *videos* the client supplied (~425MB total) haven't been transcoded or brought into the repo yet — same treatment the showreel got, just not done yet.
 - Sitemap, structured data, and full Open Graph image handling.
-- GitHub Pages hasn't been enabled in repository settings yet, and the Actions workflow hasn't run — this is the very next step once this commit is on `main`.
-- No production images, reels, preview proxies, project metrics, testimonials, client logos, or team assets have been supplied (checklist sent to client 2026-09-22).
+- GitHub Pages hasn't been enabled in repository settings yet, and the Actions workflow hasn't run — next step once a commit is authorized and pushed to `main`.
 - No final email address, form endpoint, scheduling URL, privacy copy, or legal copy has been supplied.
 - No custom domain has been purchased or configured.
-- Mobile/responsive behavior still not confirmed in a real browser from Claude's own sandbox — but a Claude-in-Chrome browser session is now available and connected, which can close this gap once something is live to check.
+- Two small unresolved naming/content questions from §10: "Hamza" vs. "Humza" Babar spelling, and no headshot supplied for Yasher Ali.
 
 ## Immediate next work
 
-1. **Add the missing metrics strip to the home page hero** — the approved mockup (`docs/design-previews/palette-comparison.html`) has a three-column band below the hero actions ("One brief / a coherent edit system", "Every ratio / 9:16 · 1:1 · 16:9", "One handoff / organized final masters"). This was not carried into the actual built home page — a real omission, flagged by the client 2026-09-22. Build it next session.
-2. **Timeline dot centering — checked, not reproduced.** Client flagged the process-timeline dots as visually off-center from the vertical line, comparing against the mockup. Measured precisely on the live site (`getBoundingClientRect` on the timeline border vs. computed dot position): dot center is within 1px of the border's true center — effectively centered. Likely a stale cache or screenshot artifact on the client's end. Re-check with a hard refresh next session before assuming it's fixed; don't re-litigate the math, just get a fresh screenshot of the live site specifically.
-3. Real content for all six placeholder routes, and the estimator's actual logic, as client assets arrive in `public/media/`.
-4. Sitemap, structured data, and full Open Graph image handling.
-5. Full `web-qa-audit` pass before calling any route launch-ready.
-6. Connect a purchased custom domain later (client's stated plan: maintain on GitHub short-term, possible move to WordPress once a domain is bought).
+1. **Get client sign-off on everything in §9 and §10, then commit and push.** Local-only per explicit instruction — waiting on the client's go-ahead before any git action.
+2. **Build the About page** using the real team bios/headshots now in `public/media/team/` — needs the Hamza/Humza spelling confirmed and a decision on how to handle Yasher Ali's missing photo (placeholder avatar vs. text-only listing) before writing it.
+3. **Build the Work page and case studies** using the six real stills in `public/media/work/` — the six work videos still need pulling from the client's folder, picking representative frames/clips, and the same transcode treatment the showreel got, before they can go on the page.
+4. The estimator's actual logic (still no real pricing rules from the client).
+5. Sitemap, structured data, and full Open Graph image handling.
+6. Full `web-qa-audit` pass before calling any route launch-ready.
+7. Connect a purchased custom domain later (client's stated plan: maintain on GitHub short-term, possible move to WordPress once a domain is bought).
 
 ## Repository publication completed
 

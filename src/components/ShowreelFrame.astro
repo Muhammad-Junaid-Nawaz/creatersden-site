@@ -1,0 +1,402 @@
+---
+/*
+  Hero showreel frame. Built per client-approved spec (2026-09-28): replaces the
+  hero's right-hand process timeline with a prominent 16:9 video frame.
+
+  MEDIA STATE (updated 2026-09-28): real showreel footage supplied by the client
+  in public/media/misc/Hero Index video.mp4 (1920x1080, 53s, ~245MB source).
+  The poster is an authentic frame pulled from that footage at 00:00:22 — the
+  exact timestamp the client requested, confirmed against the reference
+  screenshot they sent. Nothing here is invented or stock.
+
+  Delivery assets (all derived from the one supplied file, transcoded for the
+  web — see PROGRESS.md for the ffmpeg settings):
+    - poster.jpg / poster.webp — the 22s frame, ~1600px wide
+    - preview.mp4 — muted 8s loop (15s-23s), 960px wide, ~1MB, no audio track
+    - full.mp4 — full 53s reel, 1920x1080, ~23MB (down from 245MB source)
+
+  Behavior:
+    - Poster shows by default. If the visitor hasn't asked for reduced motion
+      and isn't on a save-data connection, the muted preview loop autoplays in
+      its place, with a visible pause control (spec requirement).
+    - "Play showreel" opens the full video in an accessible dialog: sound is
+      enabled only because this click is the user-interaction gesture, Escape
+      and the close button both dismiss it, focus returns to the trigger
+      button, and Tab is trapped inside the dialog while it's open.
+*/
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const media = `${base}/media/showreel`;
+---
+
+<div class="showreel">
+	<span class="showreel__corner showreel__corner--tl" aria-hidden="true"></span>
+	<span class="showreel__corner showreel__corner--tr" aria-hidden="true"></span>
+	<span class="showreel__corner showreel__corner--bl" aria-hidden="true"></span>
+	<span class="showreel__corner showreel__corner--br" aria-hidden="true"></span>
+
+	<p class="showreel__label">Studio showreel</p>
+
+	<div class="showreel__media">
+		<img
+			class="showreel__poster"
+			src={`${media}/poster.jpg`}
+			alt="Frame from the CreatersDen studio showreel — a monitor showing a raw edit in progress mid-shoot"
+			width="1600"
+			height="900"
+			loading="eager"
+		/>
+		<video
+			class="showreel__preview"
+			muted
+			loop
+			playsinline
+			preload="none"
+			poster={`${media}/poster.jpg`}
+			aria-hidden="true"
+			tabindex="-1"
+			hidden
+		>
+			<source src={`${media}/preview.mp4`} type="video/mp4" />
+		</video>
+	</div>
+
+	<div class="showreel__controls">
+		<button type="button" class="showreel__play" data-showreel-open aria-haspopup="dialog">
+			<span class="showreel__play-icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 4 L20 12 L6 20 Z" fill="currentColor" /></svg>
+			</span>
+			Play showreel
+		</button>
+		<button type="button" class="showreel__pause" data-showreel-toggle-preview hidden aria-pressed="true">
+			<span data-showreel-pause-label>Pause preview</span>
+		</button>
+	</div>
+</div>
+
+<div class="showreel-modal" id="showreel-modal" role="dialog" aria-modal="true" aria-label="Studio showreel — full video" hidden>
+	<div class="showreel-modal__backdrop" data-showreel-close></div>
+	<div class="showreel-modal__panel">
+		<button type="button" class="showreel-modal__close" data-showreel-close aria-label="Close showreel">
+			<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+				<path d="M5 5 L19 19 M19 5 L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+			</svg>
+		</button>
+		<video class="showreel-modal__video" controls playsinline>
+			<source src={`${media}/full.mp4`} type="video/mp4" />
+			Your browser doesn't support embedded video. <a href={`${media}/full.mp4`}>Download the showreel</a> instead.
+		</video>
+	</div>
+</div>
+
+<script>
+	function initShowreel() {
+		const frame = document.querySelector('.showreel');
+		const modal = document.getElementById('showreel-modal');
+		if (!frame || !modal) return;
+
+		const poster = frame.querySelector('.showreel__poster') as HTMLImageElement;
+		const preview = frame.querySelector('.showreel__preview') as HTMLVideoElement;
+		const pauseBtn = frame.querySelector('[data-showreel-toggle-preview]') as HTMLButtonElement;
+		const pauseLabel = frame.querySelector('[data-showreel-pause-label]') as HTMLElement;
+		const openBtn = frame.querySelector('[data-showreel-open]') as HTMLButtonElement;
+		const modalVideo = modal.querySelector('.showreel-modal__video') as HTMLVideoElement;
+		const closeEls = modal.querySelectorAll('[data-showreel-close]');
+
+		// --- Inline muted preview: gated on reduced-motion and data-saver ---
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		type NavConnection = { saveData?: boolean };
+		const connection = (navigator as Navigator & { connection?: NavConnection }).connection;
+		const saveData = connection?.saveData === true;
+
+		if (!reducedMotion && !saveData) {
+			preview.hidden = false;
+			poster.style.display = 'none';
+			preview.preload = 'auto';
+			preview.play().catch(() => {
+				// Autoplay blocked (e.g. low-power mode) — fall back to the static poster.
+				preview.hidden = true;
+				poster.style.display = '';
+			});
+			pauseBtn.hidden = false;
+
+			pauseBtn.addEventListener('click', () => {
+				if (preview.paused) {
+					preview.play();
+					pauseBtn.setAttribute('aria-pressed', 'true');
+					pauseLabel.textContent = 'Pause preview';
+				} else {
+					preview.pause();
+					pauseBtn.setAttribute('aria-pressed', 'false');
+					pauseLabel.textContent = 'Play preview';
+				}
+			});
+		}
+
+		// --- Full-video modal ---
+		let lastFocused: HTMLElement | null = null;
+
+		function getFocusable(): HTMLElement[] {
+			return Array.from(
+				modal.querySelectorAll<HTMLElement>(
+					'button, [href], video, [tabindex]:not([tabindex="-1"])'
+				)
+			).filter((el) => !el.hasAttribute('hidden'));
+		}
+
+		function openModal() {
+			lastFocused = document.activeElement as HTMLElement;
+			preview.pause();
+			modal.hidden = false;
+			document.body.style.overflow = 'hidden';
+			// Sound is enabled here deliberately: this call is a direct result of
+			// the visitor's own click on "Play showreel", the interaction the
+			// spec requires before audio is allowed.
+			modalVideo.muted = false;
+			modalVideo.currentTime = 0;
+			modalVideo.play().catch(() => {
+				/* If autoplay-with-sound is still blocked, the visible native controls let them press play themselves. */
+			});
+			const closeBtn = modal.querySelector('.showreel-modal__close') as HTMLElement;
+			closeBtn?.focus();
+			document.addEventListener('keydown', onKeydown);
+		}
+
+		function closeModal() {
+			modalVideo.pause();
+			modal.hidden = true;
+			document.body.style.overflow = '';
+			document.removeEventListener('keydown', onKeydown);
+			lastFocused?.focus();
+			if (!reducedMotion && !saveData && pauseBtn.getAttribute('aria-pressed') !== 'false') {
+				preview.play().catch(() => {});
+			}
+		}
+
+		function onKeydown(event: KeyboardEvent) {
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				closeModal();
+				return;
+			}
+			if (event.key === 'Tab') {
+				const focusable = getFocusable();
+				if (focusable.length === 0) return;
+				const first = focusable[0];
+				const last = focusable[focusable.length - 1];
+				if (event.shiftKey && document.activeElement === first) {
+					event.preventDefault();
+					last.focus();
+				} else if (!event.shiftKey && document.activeElement === last) {
+					event.preventDefault();
+					first.focus();
+				}
+			}
+		}
+
+		openBtn.addEventListener('click', openModal);
+		closeEls.forEach((el) => el.addEventListener('click', closeModal));
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initShowreel);
+	} else {
+		initShowreel();
+	}
+</script>
+
+<style>
+	.showreel {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		width: 100%;
+		min-width: 0;
+		background: var(--color-surface);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-sm);
+		overflow: hidden;
+	}
+
+	.showreel__media {
+		position: absolute;
+		inset: 0;
+	}
+
+	.showreel__poster,
+	.showreel__preview {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.showreel__media::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(20, 21, 25, 0.05) 0%, rgba(20, 21, 25, 0.55) 100%);
+		pointer-events: none;
+	}
+
+	/* Restrained viewfinder corner marks — camera/post-production vocabulary
+	   without being a decorative timeline, an editing control, or a floating
+	   card. Ember, used sparingly, per the palette's "lead accent" role. */
+	.showreel__corner {
+		position: absolute;
+		width: 18px;
+		height: 18px;
+		border-color: var(--color-accent);
+		opacity: 0.85;
+		z-index: 2;
+	}
+
+	.showreel__corner--tl {
+		top: var(--space-xs);
+		left: var(--space-xs);
+		border-top: 2px solid;
+		border-left: 2px solid;
+	}
+
+	.showreel__corner--tr {
+		top: var(--space-xs);
+		right: var(--space-xs);
+		border-top: 2px solid;
+		border-right: 2px solid;
+	}
+
+	.showreel__corner--bl {
+		bottom: var(--space-xs);
+		left: var(--space-xs);
+		border-bottom: 2px solid;
+		border-left: 2px solid;
+	}
+
+	.showreel__corner--br {
+		bottom: var(--space-xs);
+		right: var(--space-xs);
+		border-bottom: 2px solid;
+		border-right: 2px solid;
+	}
+
+	.showreel__label {
+		position: absolute;
+		top: var(--space-sm);
+		left: 50%;
+		transform: translateX(-50%);
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		letter-spacing: var(--tracking-label);
+		text-transform: uppercase;
+		color: var(--color-bg);
+		background: color-mix(in srgb, var(--color-accent-secondary) 88%, transparent);
+		padding: 0.2rem 0.55rem;
+		border-radius: 999px;
+		margin: 0;
+		z-index: 2;
+	}
+
+	.showreel__controls {
+		position: absolute;
+		left: var(--space-sm);
+		bottom: var(--space-sm);
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+	}
+
+	.showreel__play {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.55rem 0.9rem;
+		background: var(--color-accent);
+		color: var(--color-bg);
+		border: none;
+		border-radius: var(--radius-sm);
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition: background-color var(--duration-cut) var(--ease-cut);
+	}
+
+	.showreel__play:hover {
+		background: color-mix(in srgb, var(--color-accent) 85%, white);
+	}
+
+	.showreel__play-icon {
+		display: inline-flex;
+	}
+
+	.showreel__pause {
+		padding: 0.5rem 0.7rem;
+		background: color-mix(in srgb, var(--color-bg) 55%, transparent);
+		color: var(--color-text);
+		border: 1px solid color-mix(in srgb, var(--color-bg) 20%, transparent);
+		border-radius: var(--radius-sm);
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: var(--tracking-label);
+		text-transform: uppercase;
+		cursor: pointer;
+		backdrop-filter: blur(4px);
+	}
+
+	/* ---- Full-video accessible modal ---- */
+	.showreel-modal {
+		position: fixed;
+		inset: 0;
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: var(--space-md);
+	}
+
+	.showreel-modal[hidden] {
+		display: none;
+	}
+
+	.showreel-modal__backdrop {
+		position: absolute;
+		inset: 0;
+		background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+	}
+
+	.showreel-modal__panel {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		max-width: 1100px;
+	}
+
+	.showreel-modal__video {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		background: #000;
+		display: block;
+		border-radius: var(--radius-sm);
+	}
+
+	.showreel-modal__close {
+		position: absolute;
+		top: calc(-1 * var(--space-lg));
+		right: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		background: transparent;
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-sm);
+		color: var(--color-text);
+		cursor: pointer;
+	}
+
+	.showreel-modal__close:hover {
+		border-color: var(--color-accent);
+		color: var(--color-accent);
+	}
+</style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ShowreelFrame from '../components/ShowreelFrame.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -19,12 +20,12 @@ const heroMetrics = [
 	{ value: 'One handoff', label: 'Organized final masters' },
 ];
 
-const stages = [
-	{ code: '00:00:00:00', label: 'Ingest & editorial map', body: 'Bins organized, selects marked, the story shape agreed before a single cut is made.' },
-	{ code: '00:18:12:08', label: 'Story assembly & pacing', body: 'A trimmed assembly cut carries the narrative — proxies fast enough to keep pace with notes.' },
-	{ code: '01:04:42:16', label: 'Color, sound & motion', body: 'Grade, mix, and motion pass together so nothing fights for attention in the final conform.' },
-	{ code: '01:18:24:12', label: 'Masters & cutdowns', body: 'Delivery masters and every aspect-ratio cutdown, captioned and ready to publish.' },
-];
+// The process-timeline content that used to sit in the hero's right column
+// (ingest → assembly → color/sound/motion → masters) was removed from here on
+// 2026-09-28 per approved client spec, replaced by a showreel frame. That
+// stage data still lives in git history (commit 488d186) and is a natural
+// fit for the /process/ route once that page is built — not discarded, just
+// relocated out of the hero.
 
 // Capability framing derived from language already approved in HANDOFF.md's process
 // description — not a fabricated service menu. PROJECT.md > Content inventory still
@@ -49,7 +50,7 @@ const workPreview = [
 	title="Home"
 	description="CreatersDen is a video-editing and post-production partner for brand, tech, and creator teams — from raw footage to delivery masters."
 >
-	<!-- 1. Hero — dark. Cinematic entrance, signature timeline element. -->
+	<!-- 1. Hero — dark. Cinematic entrance, showreel frame. -->
 	<section class="hero">
 		<div class="hero__grid">
 			<div class="hero__statement">
@@ -69,17 +70,7 @@ const workPreview = [
 				</div>
 			</div>
 
-			<ol class="timeline" aria-label="Editorial process overview">
-				{
-					stages.map((stage) => (
-						<li class="timeline__stage">
-							<span class="timeline__code">{stage.code}</span>
-							<p class="timeline__label">{stage.label}</p>
-							<p class="timeline__body">{stage.body}</p>
-						</li>
-					))
-				}
-			</ol>
+			<ShowreelFrame />
 		</div>
 
 		<ul class="hero__metrics">
@@ -199,7 +190,9 @@ const workPreview = [
 
 	/* ---- 1. Hero ---- */
 	.hero {
-		padding-top: var(--space-2xl);
+		/* Reduced from --space-2xl (2026-09-28) so the primary CTA sits
+		   higher in the viewport, per approved showreel-frame spec. */
+		padding-top: var(--space-lg);
 	}
 
 	.hero__grid {
@@ -207,9 +200,12 @@ const workPreview = [
 		margin-inline: auto;
 		padding: 0 var(--space-sm) var(--space-lg);
 		display: grid;
-		grid-template-columns: 1.2fr 0.8fr;
+		/* Rebalanced from 1.2fr/0.8fr (2026-09-28) so the showreel frame reads
+		   as substantial rather than a sidebar, while the headline still wraps
+		   deliberately at two lines. */
+		grid-template-columns: 1fr 1fr;
 		gap: var(--space-xl);
-		align-items: start;
+		align-items: center;
 	}
 
 	.hero__headline {
@@ -292,65 +288,9 @@ const workPreview = [
 		border-color: var(--surface-text-muted);
 	}
 
-	/* ---- Timeline (signature element) ---- */
-	.timeline {
-		list-style: none;
-		margin: 0;
-		padding: 0 0 0 var(--space-md);
-		border-left: 2px solid var(--color-accent);
-		display: grid;
-		gap: var(--space-md);
-	}
-
-	.timeline__stage {
-		position: relative;
-	}
-
-	.timeline__stage::before {
-		content: '';
-		position: absolute;
-		/* -2.8125rem = -(--space-md's 2.5rem + half the 10px dot), centering the
-		   marker on the 2px border-left line. Measured live post-deploy and
-		   confirmed within 1px of the border's true center. */
-		left: -2.8125rem;
-		top: 0.35rem;
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
-		background: var(--color-accent);
-	}
-
-	.timeline__stage:nth-child(2)::before {
-		background: var(--color-accent-secondary);
-	}
-
-	.timeline__stage:nth-child(3)::before {
-		background: var(--color-accent-tertiary);
-	}
-
-	.timeline__stage:nth-child(4)::before {
-		background: var(--surface-text-muted);
-	}
-
-	.timeline__code {
-		display: block;
-		font-family: var(--font-mono);
-		font-size: 0.72rem;
-		letter-spacing: var(--tracking-label);
-		color: var(--color-accent);
-	}
-
-	.timeline__label {
-		font-family: var(--font-sans);
-		font-weight: 600;
-		margin: var(--space-2xs) 0;
-	}
-
-	.timeline__body {
-		font-size: 0.9rem;
-		color: var(--surface-text-muted);
-		max-width: 40ch;
-	}
+	/* Timeline (former hero signature element) removed 2026-09-28 — replaced
+	   by the showreel frame per approved spec. Rules retained in git history
+	   (commit 488d186) alongside the stage data; a natural fit for /process/. */
 
 	/* ---- Hero metrics strip (from the approved mockup, previously missing) ---- */
 	.hero__metrics {
